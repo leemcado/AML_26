@@ -41,9 +41,9 @@ DiT블록은 기본적으로 바닐라 이미지 위에서 학습되지 않고, 
 
 출력은 입력된 노이즈낀 latent에서 얼마만큼의 Noise가 꼈는지를 예측하는 방향으로 학습되며, 동시에 공분산 행렬을 출력하게끔 학습되어 손실함수로는 노이즈 예측 손실과 역방향 분포의 KL손실항으로 학습이 된다. 이 때, 가우시안을 가정했기에 공분산만으로 KL을 구할 수 있다.
 
-$$L_{simple} = \mathbb{E}_{t,x_0,\epsilon}\left[\|\epsilon - \epsilon_\theta(x_t, t)\|^2\right]$$
+$$L_{simple} = \mathbb{E}_{t,x_0,\epsilon}\left[\lVert\epsilon - \epsilon_\theta(x_t, t)\rVert^2\right]$$
 
-$$L_{vlb} = \mathbb{E}_{t,x_0,\epsilon}\left[D_{KL}\big(q(x_{t-1}\mid x_t, x_0)\,\|\,p_\theta(x_{t-1}\mid x_t)\big)\right]$$
+$$L_{vlb} = \mathbb{E}_{t,x_0,\epsilon}\left[D_{KL}\big(q(x_{t-1}\mid x_t, x_0)\;\big\Vert\;p_\theta(x_{t-1}\mid x_t)\big)\right]$$
 
 $$L_{total} = L_{simple} + \lambda L_{vlb}$$
 
@@ -66,7 +66,7 @@ DiT가 복원한 x_pred 역시 VAE의 잠재공간 위의 벡터이기 때문에
 ![](assets/img10.png)
 어텐션 블록은 트랜스포머 논문에서 제안된 멀티헤드 어텐션 수식을 파이토치로 구현했다.
 
-$$\text{Attention}(Q,K,V) = \text{softmax}\!\left(\frac{QK^{T}}{\sqrt{d_k}}\right)V$$
+$$\text{Attention}(Q,K,V) = \text{softmax}\left(\frac{QK^{T}}{\sqrt{d_k}}\right)V$$
 
 $$\text{head}_i = \text{Attention}(QW_i^{Q},\, KW_i^{K},\, VW_i^{V})$$
 
@@ -119,7 +119,7 @@ DiT 모델의 평가에는 FID지표를 사용한다.
 
 FID는 실제 이미지넷의 데이터 분포와 학습된 DiT모델이 생성한 분포간 프레셰 거리를 이용해 계산한다.
 
-$$\text{FID} = \|\mu_r - \mu_g\|^2 + \text{Tr}\!\left(\Sigma_r + \Sigma_g - 2(\Sigma_r\Sigma_g)^{1/2}\right)$$
+$$\text{FID} = \lVert\mu_r - \mu_g\rVert^2 + \text{Tr}\left(\Sigma_r + \Sigma_g - 2(\Sigma_r\Sigma_g)^{1/2}\right)$$
 
 이를 위해서는 DiT를 학습시킨후 생성 분포를 만드는 작업이 필요하다. 때문에 5만장을 생성한 후 FID를 측정한다.
 
@@ -164,9 +164,9 @@ CFG수식을 위와 같은 함수로 구현했다. 기본적으로 Guidance Scal
 ![](assets/img41.png)
 먼저 손실부터,
 
-$$d(z, z^{*}) = \frac{2}{\sqrt{c}}\,\operatorname{artanh}\!\big(\sqrt{c}\,\|{\ominus}z^{*} \oplus z\|\big)$$
+$$d(z, z^{\ast}) = \frac{2}{\sqrt{c}}\,\operatorname{artanh}\big(\sqrt{c}\,\lVert\ominus z^{\ast} \oplus z\rVert\big)$$
 
-$$L_{hyp} = \mathbb{E}\big[\,d(z, z^{*})^2\,\big]$$
+$$L_{hyp} = \mathbb{E}\big[\,d(z, z^{\ast})^2\,\big]$$
 
 쌍곡공간은 유클리드 공간이 아니기 때문에 거리 측정을 위해 위와 같은 연산을 해야한다. 손실은 단순히 쌍곡공간 위에서 예측한 샘플이 실제 샘플과 얼마나 가까운가를 측정하는 MSE Loss이다. 이런 구조의 손실항은, 모델의 내재적인 잠재공간이 쌍곡공간의 기하학을 따르게끔 유도한다. https://arxiv.org/abs/1904.02239 이 때, 이 손실의 가장 쉬운 자명해는 0으로 출력하는 항등함수이므로, Linear 레이어가 직교조건을 따르게끔 강제하여 노름이 0으로 수렴하는것을 방지시키는 메소드가 포함되어있다.
 

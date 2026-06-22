@@ -1,0 +1,23 @@
+# DiT-L Training Configuration
+model:
+  size: L
+  patch_size: 2
+  image_size: 256
+  num_classes: 1000
+
+training:
+  global_batch_size: 256
+  lr: 1.0e-4
+  weight_decay: 0.0
+  max_steps: 100000
+  log_every: 100
+  ckpt_every: 10000
+  seed: 0
+
+data:
+  latent_dir: data/cached_latents
+  num_workers: 4
+
+logging:
+  results_dir: results
+  wandb_project: project-hit

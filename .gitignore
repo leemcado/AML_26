@@ -1,0 +1,58 @@
+# === Python ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# === Virtual Environment ===
+venv/
+.venv/
+env/
+
+# === Data & Checkpoints ===
+data/cached_latents/
+data/imagenet/
+*.pt
+*.pth
+*.ckpt
+checkpoints/
+results/
+
+# === Experiment outputs (not shipped) ===
+frozen_results/
+frozen_remeasure/
+fid_check/
+fid_samples/
+interpolation_results/
+eval_logs_*/
+hierarchy_test_results/
+frozen_test_results/
+
+# === Internal docs / memos ===
+memory.md
+discription.md
+paper/
+.commitmsg
+
+
+# === WandB ===
+wandb/
+
+# === IDE ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Environment / Secrets ===
+.env
+*.key

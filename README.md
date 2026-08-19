@@ -1,6 +1,7 @@
 # HiT — Hyperbolic Diffusion Transformer
 
 [ Paper (PDF)](final_paper/AML_team3_report_final.pdf)
+
 [ Presentation (PDF)](final_paper/AML_team3_ppt_final.pdf)
 
 ## How to run
